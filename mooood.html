@@ -1,0 +1,632 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Mood Enhancer - Get personalized recommendations based on your current mood">
+    <title>Mood Enhancer - Transform Your Day</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    
+    <div class="container" role="main" aria-label="Mood Enhancer Application">
+        <header>
+            <h1>Moody Ka Ba Boss??</h1>
+            
+        </header>
+        
+        <!-- New Intro Section -->
+        <section class="intro-section" aria-labelledby="intro-heading">
+            <div class="intro-content">
+                <h2 id="intro-heading" class="intro-heading">Welcome to Your <br>Personal Mood Enhancer Gel</h2>
+                <p class="intro-text">
+                    HALLO NAME MO<br>
+                    At dahil medyo maater ako Gumawa ako neto para di kana magmood swings. <br>
+                    Just select how you're feeling right now, and I'll provide you with some personalized suggestions to help lift your spirits. 
+                     <br> <i>  By : Rogel M. Milla</i>
+                </p>
+               
+                <!-- New button to show mood selector -->
+                <button class="intro-btn" onclick="showMoodSelector()" aria-label="Show mood selection">
+                    <span class="intro-btn-icon">👇</span>
+                    <span class="intro-btn-text">Select Your Mood</span>
+                    <br>
+                </button>
+            </div>
+        </section>
+
+        <!-- Mood selector hidden by default -->
+        <section class="mood-selector" id="mood-selector" aria-labelledby="mood-question" style="display: none;">
+            <h2 id="mood-question">How are you feeling today?</h2>
+            <div class="mood-buttons" role="radiogroup" aria-label="Select your mood">
+                <button class="mood-btn happy" data-mood="happy" role="radio" aria-checked="false" aria-label="Happy">
+                    <span class="mood-icon" aria-hidden="true">😊</span>
+                    <span>Happy</span>
+                </button>
+                <button class="mood-btn angry" data-mood="angry" role="radio" aria-checked="false" aria-label="Angry">
+                    <span class="mood-icon" aria-hidden="true">😠</span>
+                    <span>Angry</span>
+                </button>
+                <button class="mood-btn sad" data-mood="sad" role="radio" aria-checked="false" aria-label="Sad">
+                    <span class="mood-icon" aria-hidden="true">😢</span>
+                    <span>Sad</span>
+                </button>
+                <button class="mood-btn fear" data-mood="fear" role="radio" aria-checked="false" aria-label="Fear">
+                    <span class="mood-icon" aria-hidden="true">😨</span>
+                    <span>Fear</span>
+                </button>
+                
+            </div>
+        </section>
+
+        
+        <main class="recommendations" id="recommendations" aria-live="polite">
+            <button class="reset-btn" onclick="resetMood()" aria-label="Choose another mood">
+                
+                <span>Choose Another Mood</span>
+                <br>
+            </button>
+            <br>
+            <section class="recommendation-section" id="activities-section" aria-labelledby="activities-title">
+                 <br> <h3 class="section-title" id="activities-title">
+                    <span aria-hidden="true">🎯</span>
+                    <span>Recommended Activities</span>
+                </h3>
+                <div class="activity-grid" id="activities-grid" role="list"></div>
+            </section>
+            
+            <section class="recommendation-section" id="images-section" aria-labelledby="images-title">
+                <h3 class="section-title" id="images-title">
+                    <span aria-hidden="true">🖼️</span>
+                    <span>Visual Inspiration</span>
+                
+                </h3>
+                <div class="image-gallery" id="image-gallery" role="list"></div>
+            </section>
+            
+            <section class="recommendation-section" id="music-section" aria-labelledby="music-title">
+                <h3 class="section-title" id="music-title">
+                    <span aria-hidden="true">🎵</span>
+                    <span>Mood-Boosting Music</span>
+                </h3>
+                <div class="music-list" id="music-list" role="list"></div>
+            </section>
+        </main>
+    </div>
+
+    <script>
+        // Recommendations database with enhanced content
+        const recommendations = {
+            
+            happy: {
+                activities: [
+                     
+                    { icon: '🎉', name: 'Share Your Joy', description: 'Call a friend and spread your happiness.<br> especially ako HAHAHAHAH' },
+                    { icon: '🎨', name: 'Create Art', description: 'Express your creativity through drawing or painting' },
+                    { icon: '💃', name: 'Dance Party', description: 'Put on your favorite music and dance like nobody\'s watching' },
+                    { icon: '🌟', name: 'Help Others', description: 'Volunteer or do something kind for someone in need' },
+                    { icon: '📸', name: 'Capture Moments', description: 'Take photos of things that make you happy' },
+                    { icon: '🍕', name: 'Treat Yourself', description: 'Enjoy your favorite food or dessert<br> kain ka kare-kare hehe' }
+                ],
+                images: [
+                    // 'https://picsum.photos/seed/happy1/300/200',
+                    // 'https://picsum.photos/seed/happy2/300/200',
+                    // 'https://picsum.photos/seed/happy3/300/200',
+                    // 'https://picsum.photos/seed/happy4/300/200',
+                    // 'https://picsum.photos/seed/happy5/300/200',
+                    // 'https://picsum.photos/seed/happy6/300/200'
+                ],
+               music: [
+     { icon: '🎶', title: 'Happy - Pharrell Williams', description: 'Uplifting pop anthem that will make you smile', link: 'https://www.youtube.com/watch?v=ZbZSe6N_BXs' },
+    { icon: '🎶', title: 'Walking on Sunshine - Katrina & The Waves', description: 'Feel-good classic that brightens any day', link: 'https://www.youtube.com/watch?v=iPUmE-tne5U' },
+    { icon: '🎶', title: 'Good as Hell - Lizzo', description: 'Confidence-boosting hit that celebrates you', link: 'https://www.youtube.com/watch?v=SmbmeOgWsqE' },
+    { icon: '🎶', title: 'Can\'t Stop the Feeling! - Justin Timberlake', description: 'Dance-worthy track that captures pure joy', link: 'https://www.youtube.com/watch?v=ru0K8uYEZWw' }
+]
+            },
+            angry: {
+                activities: [
+                    { icon: '🏃', name: 'Exercise', description: 'Release tension through physical activity and exercise' },
+                    { icon: '🧘', name: 'Deep Breathing', description: 'Practice calming breathing exercises to center yourself' },
+                    { icon: '📝', name: 'Write It Down', description: 'Express your feelings in a journal to process emotions' },
+                    { icon: '🎮', name: 'Play a Game', description: 'Channel your energy into something fun and engaging' },
+                    { icon: '🎨', name: 'Color Therapy', description: 'Use colors to express and release your emotions' },
+                    { icon: '🌊', name: 'Cold Shower', description: 'Reset your system with an invigorating cold shower' }
+                ],
+                images: [
+                    // 'https://picsum.photos/seed/calm1/300/200',
+                    // 'https://picsum.photos/seed/calm2/300/200',
+                    // 'https://picsum.photos/seed/calm3/300/200',
+                    // 'https://picsum.photos/seed/calm4/300/200',
+                    // 'https://picsum.photos/seed/calm5/300/200',
+                    // 'https://picsum.photos/seed/calm6/300/200'
+                ],
+                music: [
+                    { icon: '🎶', title: 'Let It Go - Frozen', description: 'Release your frustrations and embrace freedom' },
+                    { icon: '🎶', title: 'Roar - Katy Perry', description: 'Find your inner strength and unleash your power' },
+                    { icon: '🎶', title: 'Eye of the Tiger - Survivor', description: 'Channel your energy into determination' },
+                    { icon: '🎶', title: 'Stronger - Kelly Clarkson', description: 'Build resilience and overcome challenges' }
+                ]
+            },
+            sad: {
+                activities: [
+                    { icon: '📚', name: 'Read a Book', description: 'Escape into a good story and find comfort in words' },
+                    { icon: '👥', name: 'Talk to Someone', description: 'Share your feelings with a trusted friend or family member' },
+                    { icon: '🛁', name: 'Take a Bath', description: 'Relax and comfort yourself with a warm, soothing bath' },
+                    { icon: '🌱', name: 'Nature Walk', description: 'Find peace in the outdoors and connect with nature' },
+                    { icon: '🎬', name: 'Watch a Movie', description: 'Get lost in a compelling story that moves you' },
+                    { icon: '🍵', name: 'Tea Time', description: 'Savor a warm cup of tea and practice mindfulness' }
+                ],
+                images: [
+                    // 'https://picsum.photos/seed/peace1/300/200',
+                    // 'https://picsum.photos/seed/peace2/300/200',
+                    // 'https://picsum.photos/seed/peace3/300/200',
+                    // 'https://picsum.photos/seed/peace4/300/200',
+                    // 'https://picsum.photos/seed/peace5/300/200',
+                    // 'https://picsum.photos/seed/peace6/300/200'
+                ],
+                music: [
+                    { icon: '🎶', title: 'Fix You - Coldplay', description: 'Healing and comforting melody that understands you' },
+                    { icon: '🎶', title: 'Here Comes the Sun - The Beatles', description: 'Hopeful and uplifting song about new beginnings' },
+                    { icon: '🎶', title: 'You Will Be Found - Dear Evan Hansen', description: 'Reassuring and supportive message of hope' },
+                    { icon: '🎶', title: 'Rainy Days and Mondays - The Carpenters', description: 'Gentle song that acknowledges your feelings' }
+                ]
+            },
+            fear: {
+                activities: [
+                    { icon: '🧘', name: 'Meditation', description: 'Practice mindfulness and calm your racing thoughts' },
+                    { icon: '👨‍👩‍👧', name: 'Call a Loved One', description: 'Seek comfort and support from someone you trust' },
+                    { icon: '🎬', name: 'Watch Comedy', description: 'Distract yourself with humor and light-hearted entertainment' },
+                    { icon: '🎨', name: 'Coloring Book', description: 'Relax with creative activities that calm the mind' },
+                    { icon: '📖', name: 'Self-Help Book', description: 'Read empowering words that build confidence' },
+                    { icon: '🐕', name: 'Pet Therapy', description: 'Spend time with animals for comfort and companionship' }
+                ],
+                images: [
+                    // 'https://picsum.photos/seed/safe1/300/200',
+                    // 'https://picsum.photos/seed/safe2/300/200',
+                    // 'https://picsum.photos/seed/safe3/300/200',
+                    // 'https://picsum.photos/seed/safe4/300/200',
+                    // 'https://picsum.photos/seed/safe5/300/200',
+                    // 'https://picsum.photos/seed/safe6/300/200'
+                ],
+                music: [
+                    { icon: '🎶', title: 'Brave - Sara Bareilles', description: 'Find your courage and face your fears head-on' },
+                    { icon: '🎶', title: 'Three Little Birds - Bob Marley', description: 'Everything will be alright, don\'t worry about a thing' },
+                    { icon: '🎶', title: 'Stronger - Kelly Clarkson', description: 'Build resilience and discover your inner strength' },
+                    { icon: '🎶', title: 'The Climb - Miley Cyrus', description: 'Embrace the journey and trust in yourself' }
+                ]
+            }
+        };
+        
+
+        // Function to show mood selector
+        function showMoodSelector() {
+            const moodSelector = document.getElementById('mood-selector');
+            const introBtn = document.querySelector('.intro-btn');
+            
+            // Hide the button
+            introBtn.style.display = 'none';
+            
+            // Show mood selector with animation
+            moodSelector.style.display = 'block';
+            moodSelector.style.animation = 'slideUp 0.6s ease-out';
+            
+            // Scroll to mood selector
+            setTimeout(() => {
+                moodSelector.scrollIntoView({ 
+                    behavior: 'smooth', 
+                    block: 'center',
+                    inline: 'nearest'
+                });
+            }, 100);
+        }
+
+        // Initialize mood buttons with keyboard support
+        document.querySelectorAll('.mood-btn').forEach(button => {
+            button.addEventListener('click', handleMoodSelection);
+            button.addEventListener('keydown', handleKeyboardNavigation);
+        });
+
+        function handleMoodSelection(event) {
+            const button = event.currentTarget;
+            selectMood(button);
+        }
+
+        function handleKeyboardNavigation(event) {
+            const button = event.currentTarget;
+            const buttons = Array.from(document.querySelectorAll('.mood-btn'));
+            const currentIndex = buttons.indexOf(button);
+            
+            switch(event.key) {
+                case 'Enter':
+                case ' ':
+                    event.preventDefault();
+                    selectMood(button);
+                    break;
+                case 'ArrowRight':
+                    event.preventDefault();
+                    const nextButton = buttons[(currentIndex + 1) % buttons.length];
+                    nextButton.focus();
+                    break;
+                case 'ArrowLeft':
+                    event.preventDefault();
+                    const prevButton = buttons[(currentIndex - 1 + buttons.length) % buttons.length];
+                    prevButton.focus();
+                    break;
+            }
+        }
+
+        function selectMood(button) {
+            // Remove previous selection
+            document.querySelectorAll('.mood-btn').forEach(btn => {
+                btn.classList.remove('selected');
+                btn.setAttribute('aria-checked', 'false');
+            });
+            
+            // Add selection to clicked button
+            button.classList.add('selected');
+            button.setAttribute('aria-checked', 'true');
+            
+            // Get selected mood
+            const mood = button.getAttribute('data-mood');
+            
+            // Display recommendations with loading state
+            showRecommendations(mood);
+        }
+
+        function showRecommendations(mood) {
+            const rec = recommendations[mood];
+            const recommendationsDiv = document.getElementById('recommendations');
+            const introSection = document.querySelector('.intro-section');
+            const moodSelector = document.getElementById('mood-selector');
+            
+            // Hide intro section and mood selector with animation
+            introSection.style.animation = 'fadeOut 0.3s ease-out';
+            moodSelector.style.animation = 'fadeOut 0.3s ease-out';
+            
+            setTimeout(() => {
+                introSection.style.display = 'none';
+                moodSelector.style.display = 'none';
+                introSection.style.animation = '';
+                moodSelector.style.animation = '';
+                
+                // Show loading state
+                recommendationsDiv.style.display = 'block';
+                recommendationsDiv.innerHTML = '<div class="loading"></div>';
+                
+                // Simulate loading delay for better UX
+                setTimeout(() => {
+                    recommendationsDiv.innerHTML = `
+                        <button class="reset-btn" onclick="resetMood()" aria-label="Choose another mood">
+                            <span>Choose Another Mood</span>
+                        </button>
+                        
+                        <section class="recommendation-section" id="activities-section" aria-labelledby="activities-title">
+                            <h3 class="section-title" id="activities-title">
+                                <span aria-hidden="true">🎯</span>
+                                <span>Recommended Activities</span>
+                            </h3>
+                            <div class="activity-grid" id="activities-grid" role="list"></div>
+                        </section>
+                        
+                        <section class="recommendation-section" id="images-section" aria-labelledby="images-title">
+                            <h3 class="section-title" id="images-title">
+                                <span aria-hidden="true">🖼️</span>
+                                <span>Visual Inspiration<br></span>
+                               * coming soon wala pa e *
+                            </h3>
+                            <div class="image-gallery" id="image-gallery" role="list"></div>
+                        </section>
+                        
+                        <section class="recommendation-section" id="music-section" aria-labelledby="music-title">
+                            <h3 class="section-title" id="music-title">
+                                <span aria-hidden="true">🎵</span>
+                                <span>Mood-Boosting Music</span>
+                            </h3>
+                            <div class="music-list" id="music-list" role="list"></div>
+                        </section>
+                    `;
+                    // Inside showRecommendations(mood), after recommendationsDiv.innerHTML = `...`:
+
+// Mood messages
+const moodMessages = {
+    happy: "Nice! GOOD  MOOD SYAA ohh 😄",
+    angry: "Take a deep breath, calm down 😌  <br>  Chill ka  muna boss",
+    sad: "It's okay to feel sad, let yourself rest 💛",
+    fear: "Don't worry, everything will be alright 🌟 "
+};
+
+// Create mood message element
+const moodMessageDiv = document.createElement('h2');
+moodMessageDiv.id = 'mood-message';
+moodMessageDiv.className = 'mood-message';
+moodMessageDiv.textContent = moodMessages[mood] || "You're feeling something new!";
+
+// Insert above activities section
+const activitiesSection = document.getElementById('activities-section');
+activitiesSection.parentNode.insertBefore(moodMessageDiv, activitiesSection);
+
+                    // Populate activities
+                    populateActivities(rec.activities);
+                    
+                    // Populate images
+                    populateImages(rec.images);
+                    
+                    // Populate music
+                    populateMusic(rec.music);
+                    
+                    // Scroll to recommendations with smooth animation
+                    setTimeout(() => {
+                        recommendationsDiv.scrollIntoView({ 
+                            behavior: 'smooth', 
+                            block: 'start',
+                            inline: 'nearest'
+                        });
+                    }, 100);
+                }, 500);
+            }, 300);
+        }
+
+        function populateActivities(activities) {
+            const activitiesGrid = document.getElementById('activities-grid');
+            activitiesGrid.innerHTML = '';
+            
+            activities.forEach((activity, index) => {
+                const card = document.createElement('div');
+                card.className = 'activity-card';
+                card.style.animationDelay = `${index * 0.1}s`;
+                card.innerHTML = `
+                    <div class="activity-icon">${activity.icon}</div>
+                    <h4>${activity.name}</h4>
+                    <p>${activity.description}</p>
+                `;
+                card.onclick = () => showActivityDetails(activity);
+                card.setAttribute('tabindex', '0');
+                card.setAttribute('role', 'button');
+                card.setAttribute('aria-label', `Learn more about ${activity.name}`);
+                
+                // Add keyboard support
+                card.addEventListener('keydown', (e) => {
+                    if (e.key === 'Enter' || e.key === ' ') {
+                        e.preventDefault();
+                        showActivityDetails(activity);
+                    }
+                });
+                
+                activitiesGrid.appendChild(card);
+            });
+        }
+
+        function populateImages(images) {
+            const imageGallery = document.getElementById('image-gallery');
+            imageGallery.innerHTML = '';
+            
+            images.forEach((imageUrl, index) => {
+                const card = document.createElement('div');
+                card.className = 'image-card';
+                card.style.animationDelay = `${index * 0.1}s`;
+                card.innerHTML = `<img src="${imageUrl}" alt="Inspiring image" loading="lazy">`;
+                card.onclick = () => window.open(imageUrl, '_blank');
+                card.setAttribute('tabindex', '0');
+                card.setAttribute('role', 'button');
+                card.setAttribute('aria-label', 'View image in new tab');
+                
+                // Add keyboard support
+                card.addEventListener('keydown', (e) => {
+                    if (e.key === 'Enter' || e.key === ' ') {
+                        e.preventDefault();
+                        window.open(imageUrl, '_blank');
+                    }
+                });
+                
+                imageGallery.appendChild(card);
+            });
+        }
+
+       function populateMusic(music) {
+    const musicList = document.getElementById('music-list');
+    musicList.innerHTML = '';
+    
+    music.forEach((song, index) => {
+        const item = document.createElement('div');
+        item.className = 'music-item';
+        item.style.animationDelay = `${index * 0.1}s`;
+        item.innerHTML = `
+            <div class="music-icon">${song.icon}</div>
+            <div>
+                <h4>${song.title}</h4>
+                <p>${song.description}</p>
+            </div>
+        `;
+
+        // CLICK → opens YouTube
+        item.onclick = () => {
+            if (song.link) {
+                window.open(song.link, '_blank');
+            }
+        };
+
+        item.setAttribute('tabindex', '0');
+        item.setAttribute('role', 'button');
+        item.setAttribute('aria-label', `Play ${song.title}`);
+
+        // Keyboard support
+        item.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter' || e.key === ' ') {
+                e.preventDefault();
+                if (song.link) {
+                    window.open(song.link, '_blank');
+                }
+            }
+        });
+
+        musicList.appendChild(item);
+    });
+}
+
+        function showActivityDetails(activity) {
+            // Create a modal-like notification
+            const notification = document.createElement('div');
+            notification.style.cssText = `
+                position: fixed;
+                top: 20px;
+                right: 20px;
+                background: white;
+                padding: 20px;
+                border-radius: 12px;
+                box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+                z-index: 1000;
+                animation: slideIn 0.3s ease-out;
+                max-width: 300px;
+            `;
+            notification.innerHTML = `
+                <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 10px;">
+                    <div style="font-size: 2rem;">${activity.icon}</div>
+                    <h3 style="margin: 0; font-size: 1.2rem;">${activity.name}</h3>
+                </div>
+                <p style="margin: 0; color: #666;">${activity.description}</p>
+                <button onclick="this.parentElement.remove()" style="
+                    margin-top: 15px;
+                    padding: 8px 16px;
+                    background: #667eea;
+                    color: white;
+                    border: none;
+                    border-radius: 6px;
+                    cursor: pointer;
+                    font-size: 0.9rem;
+                ">Got it!</button>
+            `;
+            
+            document.body.appendChild(notification);
+            
+            // Auto-remove after 5 seconds
+            setTimeout(() => {
+                if (notification.parentElement) {
+                    notification.remove();
+                }
+            }, 5000);
+        }
+
+        function showMusicDetails(song) {
+            // Create a modal-like notification
+            
+            const notification = document.createElement('div');
+            notification.style.cssText = `
+                position: fixed;
+                top: 20px;
+                right: 20px;
+                background: white;
+                padding: 20px;
+                border-radius: 12px;
+                box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+                z-index: 1000;
+                animation: slideIn 0.3s ease-out;
+                max-width: 300px;
+            `;
+            notification.innerHTML = `
+                <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 10px;">
+                    <div style="font-size: 2rem;">${song.icon}</div>
+                    <h3 style="margin: 0; font-size: 1.2rem;">${song.title}</h3>
+                </div>
+                <p style="margin: 0; color: #666;">${song.description}</p>
+                <button onclick="this.parentElement.remove()" style="
+                    margin-top: 15px;
+                    padding: 8px 16px;
+                    background: #667eea;
+                    color: white;
+                    border: none;
+                    border-radius: 6px;
+                    cursor: pointer;
+                    font-size: 0.9rem;
+                ">Got it!</button>
+            `;
+            
+            document.body.appendChild(notification);
+            
+            // Auto-remove after 5 seconds
+            setTimeout(() => {
+                if (notification.parentElement) {
+                    notification.remove();
+                }
+            }, 5000);
+        }
+
+        function resetMood() {
+            // Hide recommendations with animation
+            const recommendationsDiv = document.getElementById('recommendations');
+            const introSection = document.querySelector('.intro-section');
+            // const moodSelector = document.getElementById('mood-selector');
+            const introBtn = document.querySelector('.intro-btn');
+            
+            
+            recommendationsDiv.style.animation = 'fadeOut 0.3s ease-out';
+            
+            setTimeout(() => {
+                recommendationsDiv.style.display = 'none';
+                recommendationsDiv.style.animation = '';
+                
+                // Show intro section again
+                introSection.style.display = 'block';
+                introSection.style.animation = 'fadeIn 0.5s ease-out';
+                
+                // Show intro button again
+                introBtn.style.display = 'flex';
+                
+                // Show mood selector again
+                moodSelector.style.display = 'block';
+                moodSelector.style.animation = 'fadeIn 0.5s ease-out';
+                
+                // Remove selection from mood buttons
+                document.querySelectorAll('.mood-btn').forEach(btn => {
+                    btn.classList.remove('selected');
+                    btn.setAttribute('aria-checked', 'false');
+                });
+                
+                // Scroll to top
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            }, 300);
+        }
+
+        // Add fadeOut animation
+        const style = document.createElement('style');
+        style.textContent = `
+            @keyframes fadeOut {
+                from {
+                    opacity: 1;
+                    transform: translateY(0);
+                }
+                to {
+                    opacity: 0;
+                    transform: translateY(-20px);
+                }
+            }
+            
+            @keyframes slideIn {
+                from {
+                    transform: translateX(100%);
+                    opacity: 0;
+                }
+                to {
+                    transform: translateX(0);
+                    opacity: 1;
+                }
+            }
+        `;
+        document.head.appendChild(style);
+
+        // Add keyboard support for mood selection
+        document.addEventListener('keydown', (e) => {
+            if (e.key >= '1' && e.key <= '4') {
+                const moodButtons = document.querySelectorAll('.mood-btn');
+                const index = parseInt(e.key) - 1;
+                if (moodButtons[index]) {
+                    selectMood(moodButtons[index]);
+                }
+            }
+        });
+        
+    </script>
+</body>
+</html>
