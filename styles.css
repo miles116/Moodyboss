@@ -1441,7 +1441,7 @@ h1 {
     font-size: 2rem;
     font-weight: 700;
     margin: 15px 0;
-    color: #ffffff; /* customize color */
+    color: #bb2020; /* customize color */
     text-transform: capitalize;
 }
 
@@ -1451,5 +1451,4 @@ h1 {
     font-weight: 500;
     margin: 10px 0 20px;
     color: #5476b6; /* customize color per mood if you want */
-
 }
